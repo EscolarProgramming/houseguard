@@ -1,0 +1,62 @@
+##<<------------------------Economy_Configuration------------------------>>##
+
+# Put the price of the unit block of the protection.
+# Ex. /buy house 10 = 10 * BlockPurchasePrice = $100,00
+# Ex. /buy house 100 = 100 * BlockPurchasePrice = $1000,00  
+
+BlockPurchasePrice: 10
+
+# Put the price of the unit of the size expansion.
+# Ex. /expand house 1 = 1 * BlockPurchaseExpand = $50,00
+# Ex. /expand house 10 = 10 * BlockPurchaseExpand = $500,00  
+BlockPurchaseExpand: 50
+
+# If the player want to deny the pvp, put the price payment.
+PVPPrice: 500
+
+#Put the abreviation of the coin name.
+#Will appear in the text coins.
+CoinName: $
+
+# You can choose area, hg, house or casa
+#Ex: /area, /hg, /house or /casa
+CommandName: /area
+
+##############Protection####################
+
+#Put false if you want leaving the block in the maximum height possible.
+#Put true if you want leave the block aligned with the y position player.
+Align: false
+
+# Put the name of the block and subId. Example: WOOD_STEP:2
+#look the name in website above
+#http://jd.bukkit.org/rb/apidocs/src-html/org/bukkit/Material.html#line.64
+BlockName: FENCE
+
+# Put the limit of area of the player will be able to have
+MaxAreas: 3
+
+# Put the maximum size of the area that each player can create
+MinSize: 10
+MaxSize: 50
+
+#Put the maximum and minimum height that will protect in the moment you use / buy.
+MinHeight: 0
+MaxHeight: 256
+
+#Put true if you want that is removed from the leaves and trunks of area in which the player buy.
+RemoveTree: false
+
+#Choose the  language. Use the standard i18n. In the moment have just: en_US and pt_BR
+Language: en_US
+
+
+tpDelay: 5
+
+
+#mysql if its false = sqlite, if its true = mysql
+isMySQL: false
+Server: Localhost
+Database: hg
+User: root
+Password: root
