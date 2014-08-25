@@ -48,7 +48,7 @@ Language: en_US
 #delay for tp command in seconds.
 tpDelay: 5
 
-#mysql if its false = sqlite, if its true = mysql
+#false = sqlite; true = mysql
 isMySQL: false
 Server: Localhost
 Database: hg
