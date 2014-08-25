@@ -1,9 +1,6 @@
-##<<------------------------Economy_Configuration------------------------>>##
-
 # Put the price of the unit block of the protection.
 # Ex. /buy house 10 = 10 * BlockPurchasePrice = $100,00
 # Ex. /buy house 100 = 100 * BlockPurchasePrice = $1000,00  
-
 BlockPurchasePrice: 10
 
 # Put the price of the unit of the size expansion.
@@ -21,8 +18,6 @@ CoinName: $
 # You can choose area, hg, house or casa
 #Ex: /area, /hg, /house or /casa
 CommandName: /area
-
-##############Protection####################
 
 #Put false if you want leaving the block in the maximum height possible.
 #Put true if you want leave the block aligned with the y position player.
@@ -50,9 +45,8 @@ RemoveTree: false
 #Choose the  language. Use the standard i18n. In the moment have just: en_US and pt_BR
 Language: en_US
 
-
+#delay for tp command in seconds.
 tpDelay: 5
-
 
 #mysql if its false = sqlite, if its true = mysql
 isMySQL: false

@@ -775,6 +775,11 @@ public class HouseGuard extends JavaPlugin implements Listener {
 					player.sendMessage(PrefixRed + Messages.getString("hg.area_not_found", regionName));
 				} else {
 
+					if (oldOwnerName.equalsIgnoreCase(newOwnerName)) {
+						player.sendMessage(PrefixRed + Messages.getString("hg.region_same_owner"));
+						return true;
+					}
+
 					// Validations
 					if (!player.isOp()) {
 						Integer totalRegions = regionDAO.countRegionByPlayer(newOwner);
@@ -824,7 +829,7 @@ public class HouseGuard extends JavaPlugin implements Listener {
 					regionManager.save();
 
 					String oldRegionFullName = oldOwnerName + "_" + region.getName();
-					String newRegionFullName = newOwnerName + "_" + region.getName() + oldOwnerName;
+					String newRegionFullName = newOwnerName + "_" + region.getName();
 
 					renameRegion(regionManager, region, oldRegionFullName, newRegionFullName);
 
@@ -1490,6 +1495,11 @@ public class HouseGuard extends JavaPlugin implements Listener {
 				region = regionDAO.findByOwnerAndName(hgPlayer, regionName);
 			}
 
+			if (!regionDAO.hasRegion(region.getFullName())) {
+				player.sendMessage(PrefixRed + Messages.getString("hg.area_not_found", regionName));
+				return true;
+			}
+
 			for (World world : getServer().getWorlds()) {
 				if (world.getName().equals(region.getWorld())) {
 					Double x = region.getInitialPositionX().doubleValue();
@@ -1636,6 +1646,7 @@ public class HouseGuard extends JavaPlugin implements Listener {
 	 * algumas vezes da nullpointer nas placas ao restaurar;
 	 * portas e camas nao estam vindo direito;
 	 */
+	@SuppressWarnings("unused")
 	private Boolean backup(Player player, String[] args) {
 
 		World world = null;
@@ -1938,6 +1949,7 @@ public class HouseGuard extends JavaPlugin implements Listener {
 
 
 	// TODO ainda nao esta pronto. Problema com os blocos
+	@SuppressWarnings("unused")
 	private Boolean restore(Player player, String[] args) {
 
 		World world = null;
@@ -2548,7 +2560,7 @@ public class HouseGuard extends JavaPlugin implements Listener {
 					&& !rm.getRegion(id).getMembers().contains(player.getName().toLowerCase())) {
 
 				String s = e.getMessage().toLowerCase();
-				if (s.startsWith("/sethome") && s.startsWith("/home set") && s.startsWith("/clan home set")) {
+				if (s.startsWith("/sethome") || s.startsWith("/home set") || s.startsWith("/clan home set")) {
 					e.getPlayer().sendMessage(PrefixRed + Messages.getString("hg.cannot_use_command"));
 //					e.getPlayer().sendMessage(ChatColor.RED + "Voce so pode usar este comando em suas areas ou em areas nao protegidas.");
 					e.setCancelled(true);
