@@ -2,11 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="bukkit.jar"/>
 	<classpathentry kind="lib" path="mysql-connector-java-5.1.26-bin.jar"/>
 	<classpathentry kind="lib" path="sqlite-jdbc-3.7.2.jar"/>
 	<classpathentry kind="lib" path="Vault.jar"/>
-	<classpathentry kind="lib" path="WorldEdit.jar"/>
-	<classpathentry kind="lib" path="WorldGuard.jar"/>
+	<classpathentry kind="lib" path="bukkit-1.7.2-R0.3.jar"/>
+	<classpathentry kind="lib" path="worldedit-5.6.1.jar"/>
+	<classpathentry kind="lib" path="worldguard-5.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
