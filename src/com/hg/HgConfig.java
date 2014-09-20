@@ -1,5 +1,9 @@
 package com.hg;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
+
 public class HgConfig {
 
 	private Integer blockPurchasePrice = 10;
@@ -29,6 +33,150 @@ public class HgConfig {
 
 	public HgConfig() {
 		super();
+
+		try {
+			setBlockPurchasePrice(HouseGuard.plugin.getConfig().getInt("BlockPurchasePrice"));
+		} catch (Exception e) {
+			printError(e, "BlockPurchasePrice");
+		}
+
+		try {
+			setBlockPurchaseExpand(HouseGuard.plugin.getConfig().getInt("BlockPurchaseExpand"));
+		} catch (Exception e) {
+			printError(e, "BlockPurchaseExpand");
+		}
+
+		try {
+			setPVPPrice(HouseGuard.plugin.getConfig().getInt("PVPPrice"));
+		} catch (Exception e) {
+			printError(e, "PVPPrice");
+		}
+
+		try {
+			setCoinName(HouseGuard.plugin.getConfig().getString("CoinName"));
+		} catch (Exception e) {
+			printError(e, "CoinName");
+		}
+
+		try {
+			setCommandName(HouseGuard.plugin.getConfig().getString("CommandName"));
+		} catch (Exception e) {
+			printError(e, "CommandName");
+		}
+
+		try {
+			setAlign(HouseGuard.plugin.getConfig().getBoolean("Align"));
+		} catch (Exception e) {
+			printError(e, "Align");
+		}
+
+		try {
+			if (HouseGuard.plugin.getConfig().getString("BlockName").contains(":")) {
+				String[] str = HouseGuard.plugin.getConfig().getString("BlockName").split(":");
+
+				setBlockName(new String(str[0]));
+				setBlockSubId(new Integer(str[1]));
+			} else {
+				setBlockName(HouseGuard.plugin.getConfig().getString("BlockName"));
+			}
+		} catch (Exception e) {
+			printError(e, "BlockName");
+		}
+
+		try {
+			setMaxAreas(HouseGuard.plugin.getConfig().getInt("MaxAreas"));
+		} catch (Exception e) {
+			printError(e, "MaxAreas");
+		}
+
+		try {
+			setMinSize(HouseGuard.plugin.getConfig().getInt("MinSize"));
+		} catch (Exception e) {
+			printError(e, "MinSize");
+		}
+
+		try {
+			setMaxSize(HouseGuard.plugin.getConfig().getInt("MaxSize"));
+		} catch (Exception e) {
+			printError(e, "MaxSize");
+		}
+
+		try {
+			setMinHeight(HouseGuard.plugin.getConfig().getInt("MinHeight"));
+		} catch (Exception e) {
+			printError(e, "MinHeight");
+		}
+
+		try {
+			setMaxHeight(HouseGuard.plugin.getConfig().getInt("MaxHeight"));
+		} catch (Exception e) {
+			printError(e, "MaxHeight");
+		}
+
+		try {
+			setRemoveTree(HouseGuard.plugin.getConfig().getBoolean("RemoveTree"));
+		} catch (Exception e) {
+			printError(e, "RemoveTree");
+		}
+
+		try {
+			setLanguage(HouseGuard.plugin.getConfig().getString("Language"));
+		} catch (Exception e) {
+			printError(e, "Language");
+		}
+
+		try {
+			setTpDelay(HouseGuard.plugin.getConfig().getInt("tpDelay"));
+		} catch (Exception e) {
+			printError(e, "tpDelay");
+		}
+
+		try {
+			setIsMySQL(HouseGuard.plugin.getConfig().getBoolean("isMySQL"));
+		} catch (Exception e) {
+			printError(e, "isMySQL");
+		}
+
+		try {
+			setServer(HouseGuard.plugin.getConfig().getString("Server"));
+		} catch (Exception e) {
+			printError(e, "Server");
+		}
+
+		try {
+			setDatabase(HouseGuard.plugin.getConfig().getString("Database"));
+		} catch (Exception e) {
+			printError(e, "Database");
+		}
+
+		try {
+			setUser(HouseGuard.plugin.getConfig().getString("User"));
+		} catch (Exception e) {
+			printError(e, "User");
+		}
+
+		try {
+			setPassword(HouseGuard.plugin.getConfig().getString("Password"));
+		} catch (Exception e) {
+			printError(e, "Password");
+		}
+	}
+
+
+	private void printError(Exception e, String nameParameter) {
+		String PrefixYellowConsole = ChatColor.GOLD + "[HouseGuard] " + ChatColor.YELLOW;
+		String PrefixBlueConsole = ChatColor.BLUE + "[HouseGuard] " + ChatColor.DARK_AQUA;
+		String PrefixRedConsole = ChatColor.RED + "[HouseGuard] " + ChatColor.DARK_RED;
+		ConsoleCommandSender console = Bukkit.getConsoleSender();
+
+		console.sendMessage(PrefixBlueConsole + "==================================================");
+		console.sendMessage(PrefixYellowConsole + ">HouseGuard - error in config file. The default value will be used.");
+		console.sendMessage(PrefixRedConsole + "parameter: " + nameParameter);
+		console.sendMessage(PrefixBlueConsole + "---------------------ERROR------------------------");
+		console.sendMessage("         ");
+		e.printStackTrace();
+		console.sendMessage("         ");
+		console.sendMessage(PrefixBlueConsole + "==================================================");
 	}
 
 
