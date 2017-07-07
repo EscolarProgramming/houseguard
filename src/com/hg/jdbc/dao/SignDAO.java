@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hg.HgConfig;
 import com.hg.jdbc.Conexao;
 import com.hg.jdbc.dao.model.Backup;
 import com.hg.jdbc.dao.model.Sign;
@@ -15,6 +16,9 @@ public class SignDAO implements BaseDAO {
 
 	private final Connection connection;
 
+	public SignDAO(HgConfig hgConfig) throws SQLException {
+		this(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+	}
 
 	public SignDAO(Boolean isMySQL, String server, String database, String user, String password) throws SQLException {
 		this.connection = Conexao.getConnection(isMySQL, server, database, user, password);

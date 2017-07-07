@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hg.HgConfig;
 import com.hg.jdbc.Conexao;
 import com.hg.jdbc.dao.model.Chest;
 import com.hg.jdbc.dao.model.Item;
@@ -16,6 +17,9 @@ public class ItemDAO implements BaseDAO {
 
 	private final Connection connection;
 
+	public ItemDAO(HgConfig hgConfig) throws SQLException {
+		this(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+	}
 
 	public ItemDAO(Boolean isMySQL, String server, String database, String user, String password) throws SQLException {
 		this.connection = Conexao.getConnection(isMySQL, server, database, user, password);

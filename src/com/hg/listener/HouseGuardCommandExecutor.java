@@ -387,8 +387,8 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		Integer size;
 
 		try {
-			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
 
 			com.hg.jdbc.dao.model.Player playerBd = playerDAO.findByName(player.getName());
 
@@ -487,8 +487,8 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		}
 
 		try {
-			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
 
 			com.hg.jdbc.dao.model.Player oldOwner = playerDAO.findByName(oldOwnerName);
 			com.hg.jdbc.dao.model.Player newOwner = playerDAO.findByName(newOwnerName);
@@ -623,8 +623,8 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		}
 
 		try {
-			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
 
 			com.hg.jdbc.dao.model.Player owner = playerDAO.findByName(player.getName().toLowerCase());
 			Region region = regionDAO.findByOwnerAndName(owner, regionName);
@@ -799,9 +799,9 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		}
 
 		try {
-//			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			FlagDAO flagDAO = new FlagDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+//			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
+			FlagDAO flagDAO = new FlagDAO(hgConfig);
 
 //			com.hg.jdbc.dao.model.Player owner = playerDAO.findByName(player.getName().toLowerCase());
 
@@ -857,8 +857,8 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		String newRegionFullName = player.getName().toLowerCase() + "_" + newRegionName;
 
 		try {
-			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
 
 			com.hg.jdbc.dao.model.Player owner = playerDAO.findByName(player.getName());
 			Region region = regionDAO.findByOwnerAndName(owner, oldRegionName);
@@ -1119,8 +1119,8 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		if (Util.empty(parametro)) {
 
 			try {
-				PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-				RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+				PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+				RegionDAO regionDAO = new RegionDAO(hgConfig);
 
 				com.hg.jdbc.dao.model.Player hgPlayer = playerDAO.findByName(player.getName());
 
@@ -1140,7 +1140,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		} else if (parametro.equalsIgnoreCase("sale") || parametro.equalsIgnoreCase("venda")) {
 
 			try {
-				RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+				RegionDAO regionDAO = new RegionDAO(hgConfig);
 				List<Region> regions = regionDAO.listByStatus(STATUS_SALE);
 				player.sendMessage(PrefixYellow + Messages.getString("hg.regions_sale"));
 
@@ -1156,7 +1156,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		} else if (parametro.equalsIgnoreCase("tenancy") || parametro.equalsIgnoreCase("aluguel")) {
 
 			try {
-				RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+				RegionDAO regionDAO = new RegionDAO(hgConfig);
 				List<Region> regions = regionDAO.listByStatus(STATUS_RENT);
 				player.sendMessage(PrefixYellow + Messages.getString("hg.regions_tenancy"));
 
@@ -1172,7 +1172,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		} else if (parametro.equalsIgnoreCase("all") || parametro.equalsIgnoreCase("todos")) {
 
 			try {
-				RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+				RegionDAO regionDAO = new RegionDAO(hgConfig);
 				List<Region> regions = regionDAO.listAll();
 				player.sendMessage(PrefixYellow + Messages.getString("hg.regions_all"));
 
@@ -1215,8 +1215,8 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		String regionName = args[1];
 
 		try {
-			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
 
 			com.hg.jdbc.dao.model.Player hgPlayer = playerDAO.findByName(player.getName());
 
@@ -1262,9 +1262,9 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
 	private Boolean sync(Player player) {
 		try {
-			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			FlagDAO flagDAO = new FlagDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
+			FlagDAO flagDAO = new FlagDAO(hgConfig);
 
 			for (World world : plugin.getServer().getWorlds()) {
 				RegionManager regionManager = worldGuard.getGlobalRegionManager().get(world);
@@ -1400,13 +1400,13 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		}
 
 		try {
-			BackupDAO backupDAO = new BackupDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			EntityDAO entityDAO = new EntityDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			ChestDAO chestDAO = new ChestDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			BlockDAO blockDAO = new BlockDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			SignDAO signDAO = new SignDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			ItemDAO itemDAO = new ItemDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			EnchantmentDAO enchantmentDAO = new EnchantmentDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			BackupDAO backupDAO = new BackupDAO(hgConfig);
+			EntityDAO entityDAO = new EntityDAO(hgConfig);
+			ChestDAO chestDAO = new ChestDAO(hgConfig);
+			BlockDAO blockDAO = new BlockDAO(hgConfig);
+			SignDAO signDAO = new SignDAO(hgConfig);
+			ItemDAO itemDAO = new ItemDAO(hgConfig);
+			EnchantmentDAO enchantmentDAO = new EnchantmentDAO(hgConfig);
 
 			if (args.length == 3 && "del".equalsIgnoreCase(args[2])) {
 				enchantmentDAO.dropTable();
@@ -1658,12 +1658,12 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
 		} catch (Exception e) {
 			try {
-				BackupDAO backupDAO = new BackupDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-				EntityDAO animalDAO = new EntityDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-				ChestDAO chestDAO = new ChestDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-				BlockDAO blockDAO = new BlockDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-				ItemDAO itemDAO = new ItemDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-				EnchantmentDAO enchantmentDAO = new EnchantmentDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+				BackupDAO backupDAO = new BackupDAO(hgConfig);
+				EntityDAO animalDAO = new EntityDAO(hgConfig);
+				ChestDAO chestDAO = new ChestDAO(hgConfig);
+				BlockDAO blockDAO = new BlockDAO(hgConfig);
+				ItemDAO itemDAO = new ItemDAO(hgConfig);
+				EnchantmentDAO enchantmentDAO = new EnchantmentDAO(hgConfig);
 
 				enchantmentDAO.dropTable();
 				itemDAO.dropTable();
@@ -1704,13 +1704,13 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
 		try {
 			// recuperando do banco
-			BackupDAO backupDAO = new BackupDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			EntityDAO entityDAO = new EntityDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			BlockDAO blockDAO = new BlockDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			SignDAO signDAO = new SignDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			ChestDAO chestDAO = new ChestDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			ItemDAO itemDAO = new ItemDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			EnchantmentDAO enchantmentDAO = new EnchantmentDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			BackupDAO backupDAO = new BackupDAO(hgConfig);
+			EntityDAO entityDAO = new EntityDAO(hgConfig);
+			BlockDAO blockDAO = new BlockDAO(hgConfig);
+			SignDAO signDAO = new SignDAO(hgConfig);
+			ChestDAO chestDAO = new ChestDAO(hgConfig);
+			ItemDAO itemDAO = new ItemDAO(hgConfig);
+			EnchantmentDAO enchantmentDAO = new EnchantmentDAO(hgConfig);
 
 			player.sendMessage("Restore started");
 			console.sendMessage(PrefixBlueConsole + "Restore started");
@@ -1871,7 +1871,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld());
 
 		try {
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
 
 			if (regionDAO.hasRegion(player.getName().toLowerCase() + "_" + regionName.toLowerCase())) {
 				player.sendMessage(PrefixYellow + Messages.getString("hg.name_area") + " " + regionName.toLowerCase());
@@ -1935,9 +1935,9 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 		econ.withdrawPlayer(player.getName(), sizeX * hgConfig.getBlockPurchasePrice());
 
 		try {
-			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			FlagDAO flagDAO = new FlagDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
+			FlagDAO flagDAO = new FlagDAO(hgConfig);
 
 			Region region = new Region();
 			region.setOwner(playerDAO.findByName(player.getName()));

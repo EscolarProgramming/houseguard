@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hg.HgConfig;
 import com.hg.jdbc.Conexao;
 import com.hg.jdbc.dao.model.Backup;
 
@@ -14,6 +15,9 @@ public class BackupDAO implements BaseDAO {
 
 	private final Connection connection;
 
+	public BackupDAO(HgConfig hgConfig) throws SQLException {
+		this(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+	}
 
 	public BackupDAO(Boolean isMySQL, String server, String database, String user, String password) throws SQLException {
 		this.connection = Conexao.getConnection(isMySQL, server, database, user, password);

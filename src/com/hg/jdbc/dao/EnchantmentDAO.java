@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hg.HgConfig;
 import com.hg.jdbc.Conexao;
 import com.hg.jdbc.dao.model.Enchantment;
 import com.hg.jdbc.dao.model.Item;
@@ -15,6 +16,9 @@ public class EnchantmentDAO implements BaseDAO {
 
 	private final Connection connection;
 
+	public EnchantmentDAO(HgConfig hgConfig) throws SQLException {
+		this(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+	}
 
 	public EnchantmentDAO(Boolean isMySQL, String server, String database, String user, String password) throws SQLException {
 		this.connection = Conexao.getConnection(isMySQL, server, database, user, password);

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hg.HgConfig;
 import com.hg.jdbc.dao.model.Player;
 import com.hg.jdbc.dao.model.Region;
 import com.hg.util.Util;
@@ -16,6 +17,10 @@ public class RegionDAO implements BaseDAO {
 	private final Connection connection;
 
 
+	public RegionDAO(HgConfig hgConfig) throws SQLException {
+		this(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+	}
+	
 	public RegionDAO(Boolean isMySQL, String server, String database, String user, String password) throws SQLException {
 		this.connection = com.hg.jdbc.Conexao.getConnection(isMySQL, server, database, user, password);
 	}

@@ -7,12 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hg.HgConfig;
 import com.hg.jdbc.dao.model.Flag;
 
 public class FlagDAO implements BaseDAO {
 
 	private final Connection connection;
 
+	public FlagDAO(HgConfig hgConfig) throws SQLException {
+		this(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+	}
 
 	public FlagDAO(Boolean isMySQL, String server, String database, String user, String password) throws SQLException {
 		this.connection = com.hg.jdbc.Conexao.getConnection(isMySQL, server, database, user, password);

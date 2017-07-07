@@ -123,9 +123,9 @@ public class HouseGuard extends JavaPlugin implements Listener {
 		}
 
 		try {
-			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			FlagDAO flagDAO = new FlagDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
+			FlagDAO flagDAO = new FlagDAO(hgConfig);
 
 			if (hgConfig.getIsMySQL()) {
 				playerDAO.createTableMySql();
@@ -220,9 +220,9 @@ public class HouseGuard extends JavaPlugin implements Listener {
 
 	private Boolean sync() {
 		try {
-			PlayerDAO playerDAO = new PlayerDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			RegionDAO regionDAO = new RegionDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
-			FlagDAO flagDAO = new FlagDAO(hgConfig.getIsMySQL(), hgConfig.getServer(), hgConfig.getDatabase(), hgConfig.getUser(), hgConfig.getPassword());
+			PlayerDAO playerDAO = new PlayerDAO(hgConfig);
+			RegionDAO regionDAO = new RegionDAO(hgConfig);
+			FlagDAO flagDAO = new FlagDAO(hgConfig);
 
 			for (World world : plugin.getServer().getWorlds()) {
 				RegionManager regionManager = getWorldGuard().getGlobalRegionManager().get(world);
