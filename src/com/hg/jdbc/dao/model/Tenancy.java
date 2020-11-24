@@ -6,100 +6,100 @@ import java.util.Date;
 
 public class Tenancy {
 
-	Integer id;
+    Integer id;
 
-	Player owner;
-	Player tenant; // inquilino
-	Integer tax;
-	Region region;
+    Player owner;
+    Player tenant; // inquilino
+    Integer tax;
+    Region region;
 
-	Date tenancyDate;
-
-
-	public Tenancy() {
-
-	}
+    Date tenancyDate;
 
 
-	public Tenancy(Integer id) {
-		super();
-		this.id = id;
-	}
+    public Tenancy() {
+
+    }
 
 
-	public Integer getId() {
-		return id;
-	}
+    public Tenancy(Integer id) {
+        super();
+        this.id = id;
+    }
 
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
 
-	public Player getOwner() {
-		return owner;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
 
-	public void setOwner(Player owner) {
-		this.owner = owner;
-	}
+    public Player getOwner() {
+        return owner;
+    }
 
 
-	public Player getTenant() {
-		return tenant;
-	}
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
 
 
-	public void setTenant(Player tenant) {
-		this.tenant = tenant;
-	}
+    public Player getTenant() {
+        return tenant;
+    }
 
 
-	public Integer getTax() {
-		return tax;
-	}
+    public void setTenant(Player tenant) {
+        this.tenant = tenant;
+    }
 
 
-	public void setTax(Integer tax) {
-		this.tax = tax;
-	}
+    public Integer getTax() {
+        return tax;
+    }
 
 
-	public Region getRegion() {
-		return region;
-	}
+    public void setTax(Integer tax) {
+        this.tax = tax;
+    }
 
 
-	public void setRegion(Region region) {
-		this.region = region;
-	}
+    public Region getRegion() {
+        return region;
+    }
 
 
-	public Date getTenancyDate() {
-		return tenancyDate;
-	}
+    public void setRegion(Region region) {
+        this.region = region;
+    }
 
 
-	public void setTenancyDate(Date tenancyDate) {
-		this.tenancyDate = tenancyDate;
-	}
+    public Date getTenancyDate() {
+        return tenancyDate;
+    }
 
 
-	public void setTenancyDate(String tenancyDateStr) {
-		try {
-			this.tenancyDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(tenancyDateStr);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
+    public void setTenancyDate(Date tenancyDate) {
+        this.tenancyDate = tenancyDate;
+    }
 
 
-	public String getTenancyDateString() {
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public void setTenancyDate(String tenancyDateStr) {
+        try {
+            this.tenancyDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(tenancyDateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
-		return sdf.format(this.tenancyDate);
-	}
+
+    public String getTenancyDateString() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        return sdf.format(this.tenancyDate);
+    }
 
 }

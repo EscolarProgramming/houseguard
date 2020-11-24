@@ -4,80 +4,80 @@ import java.util.List;
 
 public class Player {
 
-	Integer id;
+    Integer id;
 
-	String name;
-	List<Region> ownerRegions;
-	List<Region> tenantRegions;
-
-
-	public Player() {
-
-	}
+    String name;
+    List<Region> ownerRegions;
+    List<Region> tenantRegions;
 
 
-	public Player(String name) {
-		super();
-		this.name = name;
-	}
+    public Player() {
+
+    }
 
 
-	public Player(Integer id) {
-		super();
-		this.id = id;
-	}
+    public Player(String name) {
+        super();
+        this.name = name;
+    }
 
 
-	public Player(Integer id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
+    public Player(Integer id) {
+        super();
+        this.id = id;
+    }
 
 
-	public Integer getId() {
-		return id;
-	}
+    public Player(Integer id, String name) {
+        super();
+        this.id = id;
+        this.name = name;
+    }
 
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
 
-	public String getName() {
-		return name;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
 
-	public void setName(String name) {
-		this.name = name.toLowerCase();
-	}
+    public String getName() {
+        return name;
+    }
 
 
-	public List<Region> getOwnerRegions() {
-		return ownerRegions;
-	}
+    public void setName(String name) {
+        this.name = name.toLowerCase();
+    }
 
 
-	public void setOwnerRegions(List<Region> ownerRegions) {
-		this.ownerRegions = ownerRegions;
-	}
+    public List<Region> getOwnerRegions() {
+        return ownerRegions;
+    }
 
 
-	public List<Region> getTenantRegions() {
-		return tenantRegions;
-	}
+    public void setOwnerRegions(List<Region> ownerRegions) {
+        this.ownerRegions = ownerRegions;
+    }
 
 
-	public void setTenantRegions(List<Region> tenantRegions) {
-		this.tenantRegions = tenantRegions;
-	}
+    public List<Region> getTenantRegions() {
+        return tenantRegions;
+    }
 
 
-	@Override
-	public String toString() {
-		return "Player [id=" + id + ", name=" + name + ", ownerRegions=" + ownerRegions + ", tenantRegions=" + tenantRegions + "]";
-	}
+    public void setTenantRegions(List<Region> tenantRegions) {
+        this.tenantRegions = tenantRegions;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Player [id=" + id + ", name=" + name + ", ownerRegions=" + ownerRegions + ", tenantRegions=" + tenantRegions + "]";
+    }
 
 }

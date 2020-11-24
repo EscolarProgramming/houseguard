@@ -1,11 +1,11 @@
 name: HouseGuard
 main: com.hg.HouseGuard
 version: 0.3
-depend: [WorldGuard, WorldEdit, Vault]
+depend: [ WorldGuard, WorldEdit, Vault ]
 description: The best regions of your server! Using economy system, and permissions!
-author: [Yarkhs, AtomGamers]
+author: [ Yarkhs, AtomGamers ]
 website: dev.bukkit.org/bukkit-plugins/houseguard/
 commands:
   houseguard:
-    aliases: ['hg', 'house', 'casa', 'area']
+    aliases: [ 'hg', 'house', 'casa', 'area' ]
     description: HouseGuard - Principal Command

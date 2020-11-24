@@ -5,26 +5,26 @@ import java.sql.DriverManager;
 
 public class Conexao {
 
-	public static Connection getConnection(Boolean isMySQL, String server, String database, String user, String password) {
-		Connection conn = null;
+    public static Connection getConnection(Boolean isMySQL, String server, String database, String user, String password) {
+        Connection conn = null;
 
-		try {
+        try {
 
-			if (isMySQL) {
-				Class.forName("com.mysql.jdbc.Driver").newInstance();
+            if (isMySQL) {
+                Class.forName("com.mysql.jdbc.Driver").newInstance();
 
-				String url = "jdbc:mysql://" + server + "/" + database;
-				conn = DriverManager.getConnection(url, user, password);
-			} else {
+                String url = "jdbc:mysql://" + server + "/" + database;
+                conn = DriverManager.getConnection(url, user, password);
+            } else {
 
-				Class.forName("org.sqlite.JDBC").newInstance();
-				conn = DriverManager.getConnection("jdbc:sqlite:plugins/HouseGuard/hg.db");
-			}
+                Class.forName("org.sqlite.JDBC").newInstance();
+                conn = DriverManager.getConnection("jdbc:sqlite:plugins/HouseGuard/hg.db");
+            }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return conn;
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return conn;
+    }
 
 }

@@ -2,61 +2,61 @@ package com.hg.jdbc.dao.model;
 
 public class Enchantment {
 
-	Integer id;
-//	Integer bukkitEnchantmentId;
-	String type;
-	Integer level;
-	Item item;
+    Integer id;
+    //	Integer bukkitEnchantmentId;
+    String type;
+    Integer level;
+    Item item;
 
 
-	public Enchantment() {
+    public Enchantment() {
 
-	}
-
-
-	public Integer getId() {
-		return id;
-	}
+    }
 
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
 
-	public String getType() {
-		return type;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public String getType() {
+        return type;
+    }
 
 
-	public Integer getLevel() {
-		return level;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
 
-	public void setLevel(Integer level) {
-		this.level = level;
-	}
+    public Integer getLevel() {
+        return level;
+    }
 
 
-	public Item getItem() {
-		return item;
-	}
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
 
 
-	public void setItem(Item item) {
-		this.item = item;
-	}
+    public Item getItem() {
+        return item;
+    }
 
 
-	@Override
-	public String toString() {
-		return "Enchantment [id=" + id + ", type=" + type + ", level=" + level + ", item=" + item + "]";
-	}
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Enchantment [id=" + id + ", type=" + type + ", level=" + level + ", item=" + item + "]";
+    }
 
 }

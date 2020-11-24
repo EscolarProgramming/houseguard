@@ -7,81 +7,77 @@ import java.util.List;
 
 public class Backup {
 
-	Integer id;
-	String world;
-	Date date;
-	List<Block> blocks;
+    Integer id;
+    String world;
+    Date date;
+    List<Block> blocks;
 
 
-	public Backup() {
-		super();
-	}
+    public Backup() {
+        super();
+    }
 
 
-	public Backup(Integer id) {
-		this();
-		this.id = id;
-	}
+    public Backup(Integer id) {
+        this();
+        this.id = id;
+    }
 
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
 
-	public String getWorld() {
-		return world;
-	}
+    public String getWorld() {
+        return world;
+    }
 
 
-	public void setWorld(String world) {
-		this.world = world;
-	}
+    public void setWorld(String world) {
+        this.world = world;
+    }
 
 
-	public Date getDate() {
-		return date;
-	}
+    public Date getDate() {
+        return date;
+    }
 
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setDate(String dateStr) {
+        try {
+            this.date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Block> getBlocks() {
+        return blocks;
+    }
+
+    public void setBlocks(List<Block> blocks) {
+        this.blocks = blocks;
+    }
+
+    public String getDateString() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return sdf.format(this.date);
+    }
 
 
-	public List<Block> getBlocks() {
-		return blocks;
-	}
-
-
-	public void setBlocks(List<Block> blocks) {
-		this.blocks = blocks;
-	}
-
-
-	public void setDate(String dateStr) {
-		try {
-			this.date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateStr);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	public String getDateString() {
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
-		return sdf.format(this.date);
-	}
-
-
-	@Override
-	public String toString() {
-		return "Backup [id=" + id + ", world=" + world + ", date=" + date + ", blocks=" + blocks + "]";
-	}
+    @Override
+    public String toString() {
+        return "Backup [id=" + id + ", world=" + world + ", date=" + date + ", blocks=" + blocks + "]";
+    }
 
 }
