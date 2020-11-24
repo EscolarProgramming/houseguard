@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Material;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 public class Util {
@@ -247,7 +248,7 @@ public class Util {
     /**
      * Obs: Caso seja Integer ou BigDecimal, não testa se é 0, pois é considerado um valor válido.
      *
-     * @param Object
+     * @param o
      * @return <b>true</> se for vazio.
      */
     public static Boolean empty(Object o) {
@@ -501,4 +502,21 @@ public class Util {
         }
     }
 
+    public static boolean isLog(Material material) {
+        return material == Material.ACACIA_LOG ||
+                material == Material.BIRCH_LOG ||
+                material == Material.DARK_OAK_LOG ||
+                material == Material.JUNGLE_LOG ||
+                material == Material.OAK_LOG ||
+                material == Material.SPRUCE_LOG;
+    }
+
+    public static boolean isLeaves(Material material) {
+        return material == Material.ACACIA_LEAVES ||
+                material == Material.BIRCH_LEAVES ||
+                material == Material.DARK_OAK_LEAVES ||
+                material == Material.JUNGLE_LEAVES ||
+                material == Material.OAK_LEAVES ||
+                material == Material.SPRUCE_LEAVES;
+    }
 }

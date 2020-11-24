@@ -27,9 +27,10 @@ import com.hg.listener.CommandSetHomeListener;
 import com.hg.listener.HouseGuardCommandExecutor;
 import com.hg.util.Messages;
 import com.hg.util.Util;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
@@ -105,7 +106,7 @@ public class HouseGuard extends JavaPlugin implements Listener {
         sendMessage(PrefixYellowConsole + "Good use :)");
 
         getServer().getPluginManager().registerEvents(new CommandSetHomeListener(), this);
-        this.getCommand("basic").setExecutor(new HouseGuardCommandExecutor(hgConfig, plugin, econ, getWorldGuard()));
+        this.getCommand("houseguard").setExecutor(new HouseGuardCommandExecutor(hgConfig, plugin, econ, getWorldGuard()));
 
 //		worldGuard = getWorldGuard();
 
@@ -220,7 +221,7 @@ public class HouseGuard extends JavaPlugin implements Listener {
             FlagDAO flagDAO = new FlagDAO(hgConfig);
 
             for (World world : plugin.getServer().getWorlds()) {
-                RegionManager regionManager = getWorldGuard().getGlobalRegionManager().get(world);
+                RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
                 Map<String, ProtectedRegion> regions = regionManager.getRegions();
 
                 console.sendMessage(PrefixYellowConsole + world.getName());
@@ -261,7 +262,7 @@ public class HouseGuard extends JavaPlugin implements Listener {
                             region.setId(regionDAO.findIdByRegion(region));
 
                             // for complicado necessario para conseguir o nome da flag e seu valor. Tirado diretamente do codigo do worldguard
-                            for (com.sk89q.worldguard.protection.flags.Flag<?> defaultFlags : DefaultFlag.getFlags()) {
+                            for (com.sk89q.worldguard.protection.flags.Flag<?> defaultFlags : WorldGuard.getInstance().getFlagRegistry().getAll()) {
                                 Object flag = protectedRegion.getFlag(defaultFlags);
 
                                 if (Util.empty(flag)) {

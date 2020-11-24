@@ -29,6 +29,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.BlockVector;
 
 import com.hg.HgConfig;
 import com.hg.HgPermissions;
@@ -49,15 +50,18 @@ import com.hg.jdbc.dao.model.Item;
 import com.hg.jdbc.dao.model.Region;
 import com.hg.util.Messages;
 import com.hg.util.Util;
-import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.databases.ProtectionDatabaseException;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.FlagContext;
+import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
@@ -539,7 +543,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
                     RegionManager regionManager = null;
                     for (World world : worldGuard.getServer().getWorlds()) {
                         if (world.getName().equalsIgnoreCase(region.getWorld())) {
-                            regionManager = worldGuard.getGlobalRegionManager().get(world);
+                            regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
                             break;
                         }
 
@@ -578,11 +582,6 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
                 }
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ProtectionDatabaseException e) {
-            // TODO fazer mensagem melhor
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -661,7 +660,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
 
     private Boolean expand(Player player, String[] args) {
-        RegionManager regionManager = worldGuard.getRegionManager(player.getWorld());
+        RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
 
         String regionName;
         String regionFullName;
@@ -717,7 +716,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
         try {
             regionManager.save();
-        } catch (ProtectionDatabaseException e) {
+        } catch (StorageException e) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_save"));
         }
 
@@ -727,7 +726,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
 
     private Boolean msg(Player player, String[] args) {
-        RegionManager regionManager = worldGuard.getRegionManager(player.getWorld());
+        RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
 
         String regionName;
         String regionFullName;
@@ -759,14 +758,14 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
         ProtectedRegion region = regionManager.getRegion(regionFullName);
         try {
-            region.setFlag(DefaultFlag.GREET_MESSAGE, DefaultFlag.GREET_MESSAGE.parseInput(worldGuard, player, ChatColor.AQUA + "" + message));
+            region.setFlag(Flags.GREET_MESSAGE, Flags.GREET_MESSAGE.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput(ChatColor.AQUA + "" + message).build()));
         } catch (InvalidFlagFormat e1) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_flags"));
         }
 
         try {
             regionManager.save();
-        } catch (ProtectionDatabaseException e) {
+        } catch (StorageException e) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_save"));
         }
 
@@ -801,8 +800,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
             RegionManager regionManager = null;
             for (World world : worldGuard.getServer().getWorlds()) {
-
-                regionManager = worldGuard.getGlobalRegionManager().get(world);
+                regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
 
                 if (regionManager.getRegion(regionFullName) != null) {
 
@@ -813,7 +811,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
                     try {
                         regionManager.save();
-                    } catch (ProtectionDatabaseException e) {
+                    } catch (StorageException e) {
                         player.sendMessage(PrefixRed + Messages.getString("hg.erro_save"));
                     }
 
@@ -866,7 +864,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
                 RegionManager regionManager = null;
                 for (World world : worldGuard.getServer().getWorlds()) {
                     if (world.getName().equalsIgnoreCase(region.getWorld())) {
-                        regionManager = worldGuard.getGlobalRegionManager().get(world);
+                        regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
                         break;
                     }
 
@@ -886,12 +884,12 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
     }
 
 
-    private void renameRegion(RegionManager regionManager, Region region, String oldRegionFullName, String newRegionFullName) throws ProtectionDatabaseException {
+    private void renameRegion(RegionManager regionManager, Region region, String oldRegionFullName, String newRegionFullName) throws StorageException {
         ProtectedRegion protectedRegion = regionManager.getRegion(oldRegionFullName);
 
         BlockVector blockVectorInitial = new BlockVector(region.getInitialPositionX(), region.getInitialPositionY(), region.getInitialPositionZ());
         BlockVector blockVectorFinal = new BlockVector(region.getFinalPositionX(), region.getFinalPositionY(), region.getFinalPositionZ());
-        ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(newRegionFullName, blockVectorInitial, blockVectorFinal);
+        ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(newRegionFullName, BlockVector3.at(blockVectorInitial.getX(), blockVectorInitial.getY(), blockVectorInitial.getZ()), BlockVector3.at(blockVectorFinal.getX(), blockVectorFinal.getY(), blockVectorFinal.getZ()));
 
         protectedCuboidRegion.setPriority(100);
         protectedCuboidRegion.setOwners(protectedRegion.getOwners());
@@ -905,7 +903,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
 
     private Boolean pvp(CommandSender sender, Player player, String[] args) {
-        RegionManager regionManager = worldGuard.getRegionManager(player.getWorld());
+        RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
 
         String regionName;
         String regionFullName;
@@ -939,7 +937,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
         if (pvp.equalsIgnoreCase("on")) {
 
             try {
-                protectedRegion.setFlag(DefaultFlag.PVP, DefaultFlag.PVP.parseInput(worldGuard, sender, "allow"));
+                protectedRegion.setFlag(Flags.PVP, Flags.PVP.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("allow").build()));
                 player.sendMessage(PrefixYellow + Messages.getString("hg.pvp_enabled", regionName));
                 econ.withdrawPlayer(player.getName(), hgConfig.getPVPPrice());
             } catch (InvalidFlagFormat e) {
@@ -948,7 +946,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
         } else if (pvp.equalsIgnoreCase("off")) {
 
             try {
-                protectedRegion.setFlag(DefaultFlag.PVP, DefaultFlag.PVP.parseInput(worldGuard, sender, "deny"));
+                protectedRegion.setFlag(Flags.PVP, Flags.PVP.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
                 player.sendMessage(PrefixYellow + Messages.getString("hg.pvp_disabled", regionName));
                 econ.withdrawPlayer(player.getName(), hgConfig.getPVPPrice());
             } catch (InvalidFlagFormat e) {
@@ -962,7 +960,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
         try {
             regionManager.save();
-        } catch (ProtectionDatabaseException e) {
+        } catch (StorageException e) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_save"));
         }
 
@@ -996,7 +994,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        RegionManager regionManager = worldGuard.getRegionManager(player.getWorld());
+        RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
         ProtectedRegion protectedRegion = regionManager.getRegion(regionFullName);
 
         if (Util.empty(protectedRegion)) {
@@ -1008,7 +1006,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
         player.sendMessage(PrefixYellow + Messages.getString("hg.add_player_to_area", gPlayer.getName()));
         try {
             regionManager.save();
-        } catch (ProtectionDatabaseException e) {
+        } catch (StorageException e) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_save"));
 
         }
@@ -1037,7 +1035,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        RegionManager mgr = worldGuard.getRegionManager(player.getWorld());
+        RegionManager mgr = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
         if (mgr.getRegion(regionFullName) == null) {
             player.sendMessage(PrefixRed + Messages.getString("hg.area_not_found", regionName));
             return true;
@@ -1048,7 +1046,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
         try {
             mgr.save();
-        } catch (ProtectionDatabaseException e) {
+        } catch (StorageException e) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_save"));
 
         }
@@ -1059,8 +1057,8 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
     private Boolean info(Player player) {
 
-        RegionManager regionManager = worldGuard.getRegionManager(player.getWorld());
-        ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation());
+        RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
+        ApplicableRegionSet set = regionManager.getApplicableRegions(BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()));
 
         console.sendMessage("set: " + set);
         console.sendMessage("set.size(): " + set.size());
@@ -1073,7 +1071,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
         set.toString().toLowerCase();
         String id = set.iterator().next().getId();
-        Double tamanho = regionManager.getRegion(id).getMaximumPoint().getX() - regionManager.getRegion(id).getMinimumPoint().getX();
+        int tamanho = regionManager.getRegion(id).getMaximumPoint().getX() - regionManager.getRegion(id).getMinimumPoint().getX();
 
         if (player.getName().equalsIgnoreCase(regionManager.getRegion(id).getOwners().toUserFriendlyString()) || player.isOp()) {
             if (!player.isOp()) {
@@ -1083,7 +1081,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
             }
 
             player.sendMessage(PrefixYellow + Messages.getString("hg.area_valor", ChatColor.RED + id.split("_")[id.split("_").length - 1]));
-            player.sendMessage(PrefixYellow + Messages.getString("hg.size_valor", ChatColor.RED + "" + tamanho.intValue() + " x " + tamanho.intValue()));
+            player.sendMessage(PrefixYellow + Messages.getString("hg.size_valor", ChatColor.RED + "" + tamanho + " x " + tamanho));
 
             if (regionManager.getRegion(id).getMembers().size() != 0) {
                 player.sendMessage(PrefixYellow + Messages.getString("hg.members_valor", ChatColor.YELLOW + regionManager.getRegion(id).getMembers().toUserFriendlyString()));
@@ -1093,7 +1091,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
         } else {
             player.sendMessage(PrefixRed + Messages.getString("hg.area_player", ChatColor.RED + regionManager.getRegion(id).getOwners().toUserFriendlyString()));
             player.sendMessage(PrefixRed + Messages.getString("hg.area_valor", ChatColor.RED + id.split("_")[id.split("_").length - 1]));
-            player.sendMessage(PrefixRed + Messages.getString("hg.size_valor", ChatColor.RED + "" + tamanho.intValue() + " x " + tamanho.intValue()));
+            player.sendMessage(PrefixRed + Messages.getString("hg.size_valor", ChatColor.RED + "" + tamanho + " x " + tamanho));
         }
 
         return true;
@@ -1261,7 +1259,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
             FlagDAO flagDAO = new FlagDAO(hgConfig);
 
             for (World world : plugin.getServer().getWorlds()) {
-                RegionManager regionManager = worldGuard.getGlobalRegionManager().get(world);
+                RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
                 Map<String, ProtectedRegion> regions = regionManager.getRegions();
 
                 console.sendMessage(PrefixYellowConsole + world.getName());
@@ -1302,7 +1300,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
                             region.setId(regionDAO.findIdByRegion(region));
 
                             // for complicado necessario para conseguir o nome da flag e seu valor. Tirado diretamente do codigo do worldguard
-                            for (com.sk89q.worldguard.protection.flags.Flag<?> defaultFlags : DefaultFlag.getFlags()) {
+                            for (com.sk89q.worldguard.protection.flags.Flag<?> defaultFlags : WorldGuard.getInstance().getFlagRegistry().getAll()) {
                                 Object flag = protectedRegion.getFlag(defaultFlags);
 
                                 if (Util.empty(flag)) {
@@ -1340,7 +1338,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
     public String appendFlagsList(ProtectedRegion protectedRegion) {
         StringBuffer str = new StringBuffer();
 
-        for (com.sk89q.worldguard.protection.flags.Flag<?> flag : DefaultFlag.getFlags()) {
+        for (com.sk89q.worldguard.protection.flags.Flag<?> flag : WorldGuard.getInstance().getFlagRegistry().getAll()) {
             Object val = protectedRegion.getFlag(flag);
 
             str.append(", ");
@@ -1435,7 +1433,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
             player.sendMessage("Backup started");
             console.sendMessage(PrefixBlueConsole + "Backup started");
 
-            RegionManager regionManager = worldGuard.getGlobalRegionManager().get(world);
+            RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world));
             Map<String, ProtectedRegion> regions = regionManager.getRegions();
             StringBuffer blocksAndLocations = new StringBuffer();
             StringBuffer specialBlocksAndLocations = new StringBuffer();
@@ -1861,7 +1859,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
 
     public void construir(Player player, int sizeX, int sizeZ, String regionName, Boolean noFence) {
-        RegionManager regionManager = worldGuard.getRegionManager(player.getWorld());
+        RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
 
         try {
             RegionDAO regionDAO = new RegionDAO(hgConfig);
@@ -1884,7 +1882,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
         BlockVector blockVectorInitial = new BlockVector(initialPositionX, hgConfig.getMaxHeight(), initialPositionZ);
         BlockVector blockVectorFinal = new BlockVector(finalPositionX, hgConfig.getMinHeight(), finalPositionZ);
-        ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(player.getName().toLowerCase() + "_" + regionName, blockVectorInitial, blockVectorFinal);
+        ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(player.getName().toLowerCase() + "_" + regionName, BlockVector3.at(blockVectorInitial.getX(), blockVectorInitial.getY(), blockVectorInitial.getZ()), BlockVector3.at(blockVectorFinal.getX(), blockVectorFinal.getY(), blockVectorFinal.getZ()));
         DefaultDomain defaultDomain = new DefaultDomain();
         regionManager.addRegion(protectedCuboidRegion);
         protectedCuboidRegion.setPriority(100);
@@ -1892,12 +1890,12 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
         protectedCuboidRegion.setOwners(defaultDomain);
 
         try {
-            protectedCuboidRegion.setFlag(DefaultFlag.PVP, DefaultFlag.PVP.parseInput(worldGuard, player, "allow"));
-            protectedCuboidRegion.setFlag(DefaultFlag.USE, DefaultFlag.USE.parseInput(worldGuard, player, "deny"));
-            protectedCuboidRegion.setFlag(DefaultFlag.ENDER_BUILD, DefaultFlag.ENDER_BUILD.parseInput(worldGuard, player, "deny"));
-            protectedCuboidRegion.setFlag(DefaultFlag.CREEPER_EXPLOSION, DefaultFlag.CREEPER_EXPLOSION.parseInput(worldGuard, player, "deny"));
-            protectedCuboidRegion.setFlag(DefaultFlag.GHAST_FIREBALL, DefaultFlag.GHAST_FIREBALL.parseInput(worldGuard, player, "deny"));
-            protectedCuboidRegion.setFlag(DefaultFlag.GREET_MESSAGE, DefaultFlag.GREET_MESSAGE.parseInput(worldGuard, player, ChatColor.AQUA + player.getName() + "'s region"));
+            protectedCuboidRegion.setFlag(Flags.PVP, Flags.PVP.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("allow").build()));
+            protectedCuboidRegion.setFlag(Flags.USE, Flags.USE.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
+            protectedCuboidRegion.setFlag(Flags.ENDER_BUILD, Flags.ENDER_BUILD.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
+            protectedCuboidRegion.setFlag(Flags.CREEPER_EXPLOSION, Flags.CREEPER_EXPLOSION.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
+            protectedCuboidRegion.setFlag(Flags.GHAST_FIREBALL, Flags.GHAST_FIREBALL.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
+            protectedCuboidRegion.setFlag(Flags.GREET_MESSAGE, Flags.GREET_MESSAGE.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput(ChatColor.AQUA + player.getName() + "'s region").build()));
         } catch (InvalidFlagFormat e1) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_flags"));
         }
@@ -1918,7 +1916,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
         try {
             regionManager.save();
-        } catch (ProtectionDatabaseException e) {
+        } catch (StorageException e) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_save"));
         }
         player.sendMessage(PrefixYellow + Messages.getString("hg.buy_are_sucess", ChatColor.RED + hgConfig.getCoinName() + sizeX * hgConfig.getBlockPurchasePrice()));
@@ -1947,12 +1945,12 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
             regionDAO.insert(region);
             region.setId(regionDAO.findIdByRegion(region));
 
-            flagDAO.insert(new Flag(DefaultFlag.PVP.getName(), "alow", region));
-            flagDAO.insert(new Flag(DefaultFlag.USE.getName(), "deny", region));
-            flagDAO.insert(new Flag(DefaultFlag.ENDER_BUILD.getName(), "deny", region));
-            flagDAO.insert(new Flag(DefaultFlag.CREEPER_EXPLOSION.getName(), "deny", region));
-            flagDAO.insert(new Flag(DefaultFlag.GHAST_FIREBALL.getName(), "deny", region));
-            flagDAO.insert(new Flag(DefaultFlag.GREET_MESSAGE.getName(), player.getName() + "'s region", region));
+            flagDAO.insert(new Flag(Flags.PVP.getName(), "alow", region));
+            flagDAO.insert(new Flag(Flags.USE.getName(), "deny", region));
+            flagDAO.insert(new Flag(Flags.ENDER_BUILD.getName(), "deny", region));
+            flagDAO.insert(new Flag(Flags.CREEPER_EXPLOSION.getName(), "deny", region));
+            flagDAO.insert(new Flag(Flags.GHAST_FIREBALL.getName(), "deny", region));
+            flagDAO.insert(new Flag(Flags.GREET_MESSAGE.getName(), player.getName() + "'s region", region));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1965,7 +1963,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
                     for (int x = initialPositionX; x < finalPositionX; x++) {
                         for (int z = initialPositionZ; z < finalPositionZ; z++) {
                             Block block = new Location(player.getWorld(), x, y, z).getBlock();
-                            if (block.getType() == Material.LEAVES || block.getType() == Material.LOG) {
+                            if (Util.isLeaves(block.getType()) || Util.isLog(block.getType())) {
                                 block.setType(Material.AIR);
                             }
                         }
@@ -2118,10 +2116,10 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
     // TODO revisar
     public void expandir(Player player, int xmin, int xmax, int zmin, int zmax, String area, Integer tamanho) {
-        RegionManager mgr = worldGuard.getRegionManager(player.getWorld());
+        RegionManager mgr = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
         BlockVector bv1 = new BlockVector(xmin - tamanho, hgConfig.getMinHeight(), zmin - tamanho);
         BlockVector bv2 = new BlockVector(xmax + tamanho, hgConfig.getMaxHeight(), zmax + tamanho);
-        ProtectedCuboidRegion pr = new ProtectedCuboidRegion(player.getName().toLowerCase() + "_" + area, bv1, bv2);
+        ProtectedCuboidRegion pr = new ProtectedCuboidRegion(player.getName().toLowerCase() + "_" + area, BlockVector3.at(bv1.getX(), bv1.getY(), bv1.getZ()), BlockVector3.at(bv2.getX(), bv2.getY(), bv2.getZ()));
         DefaultDomain dd = new DefaultDomain();
         mgr.addRegion(pr);
         pr.setPriority(100);
@@ -2129,10 +2127,10 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
         pr.setOwners(dd);
 
         try {
-            pr.setFlag(DefaultFlag.PVP, DefaultFlag.PVP.parseInput(worldGuard, player, "allow"));
-            pr.setFlag(DefaultFlag.USE, DefaultFlag.USE.parseInput(worldGuard, player, "deny"));
-            pr.setFlag(DefaultFlag.ENDER_BUILD, DefaultFlag.ENDER_BUILD.parseInput(worldGuard, player, "deny"));
-            pr.setFlag(DefaultFlag.CREEPER_EXPLOSION, DefaultFlag.CREEPER_EXPLOSION.parseInput(worldGuard, player, "deny"));
+            pr.setFlag(Flags.PVP, Flags.PVP.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("allow").build()));
+            pr.setFlag(Flags.USE, Flags.USE.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
+            pr.setFlag(Flags.ENDER_BUILD, Flags.ENDER_BUILD.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
+            pr.setFlag(Flags.CREEPER_EXPLOSION, Flags.CREEPER_EXPLOSION.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
         } catch (InvalidFlagFormat e1) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_flags"));
         }
@@ -2144,20 +2142,20 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
             mgr.removeRegion(player.getName().toLowerCase() + "_" + area);
             BlockVector bv1n = new BlockVector(xmin, hgConfig.getMinHeight(), zmin);
             BlockVector bv2n = new BlockVector(xmax, hgConfig.getMaxHeight(), zmax);
-            pr.setMaximumPoint(bv2n);
-            pr.setMinimumPoint(bv1n);
+            pr.setMaximumPoint(BlockVector3.at(bv2n.getX(), bv2n.getY(), bv2n.getZ()));
+            pr.setMinimumPoint(BlockVector3.at(bv1n.getX(), bv1n.getY(), bv1n.getZ()));
             mgr.addRegion(pr);
             try {
-                pr.setFlag(DefaultFlag.PVP, DefaultFlag.PVP.parseInput(worldGuard, player, "allow"));
-                pr.setFlag(DefaultFlag.USE, DefaultFlag.USE.parseInput(worldGuard, player, "deny"));
-                pr.setFlag(DefaultFlag.ENDER_BUILD, DefaultFlag.ENDER_BUILD.parseInput(worldGuard, player, "deny"));
-                pr.setFlag(DefaultFlag.CREEPER_EXPLOSION, DefaultFlag.CREEPER_EXPLOSION.parseInput(worldGuard, player, "deny"));
+                pr.setFlag(Flags.PVP, Flags.PVP.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("allow").build()));
+                pr.setFlag(Flags.USE, Flags.USE.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
+                pr.setFlag(Flags.ENDER_BUILD, Flags.ENDER_BUILD.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
+                pr.setFlag(Flags.CREEPER_EXPLOSION, Flags.CREEPER_EXPLOSION.parseInput(FlagContext.create().setSender(BukkitAdapter.adapt(player)).setInput("deny").build()));
             } catch (InvalidFlagFormat ex) {
                 player.sendMessage(PrefixRed + Messages.getString("hg.erro_select_flags"));
             }
             try {
                 mgr.save();
-            } catch (ProtectionDatabaseException e) {
+            } catch (StorageException e) {
                 player.sendMessage(PrefixRed + Messages.getString("hg.erro_save"));
             }
             return;
@@ -2165,7 +2163,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
 
         try {
             mgr.save();
-        } catch (ProtectionDatabaseException e) {
+        } catch (StorageException e) {
             player.sendMessage(PrefixRed + Messages.getString("hg.erro_save"));
         }
         delParede(player, xmin, xmax, zmin, zmax);
@@ -2209,7 +2207,7 @@ public class HouseGuardCommandExecutor implements CommandExecutor {
         } else {
             for (int x = xmin; x < xmax; x++) {
                 Block xb = w.getBlockAt(x, y, zmin);
-                xb.setType(Material.FENCE);
+                xb.setType(Material.OAK_FENCE);
             }
             for (int x2 = xmin; x2 <= xmax; x2++) {
                 Block xb = w.getBlockAt(x2, y, zmax);

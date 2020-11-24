@@ -23,10 +23,10 @@ CommandName: /area
 #Put true if you want leave the block aligned with the y position player.
 Align: false
 
-# Put the name of the block and subId. Example: WOOD_STEP:2
+# Put the name of the block and subId. Example: OAK_FENCE
 #look the name in website above
-#http://jd.bukkit.org/rb/apidocs/src-html/org/bukkit/Material.html#line.64
-BlockName: FENCE
+#https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+BlockName: OAK_FENCE
 
 # Put the limit of area of the player will be able to have
 MaxAreas: 3

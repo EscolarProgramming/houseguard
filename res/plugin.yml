@@ -5,6 +5,7 @@ depend: [ WorldGuard, WorldEdit, Vault ]
 description: The best regions of your server! Using economy system, and permissions!
 author: [ Yarkhs, AtomGamers ]
 website: dev.bukkit.org/bukkit-plugins/houseguard/
+api-version: 1.16
 commands:
   houseguard:
     aliases: [ 'hg', 'house', 'casa', 'area' ]

@@ -7,6 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import com.hg.util.Messages;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -24,9 +27,9 @@ public class CommandSetHomeListener implements Listener {
     @EventHandler
     public void OnCommand(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
-        RegionManager rm = worldGuard.getRegionManager(player.getWorld());
+        RegionManager rm = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
 
-        ApplicableRegionSet set = rm.getApplicableRegions(player.getLocation());
+        ApplicableRegionSet set = rm.getApplicableRegions(BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()));
         if (set.size() == 0) {
             return;
         }
